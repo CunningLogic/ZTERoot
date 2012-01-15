@@ -27,7 +27,7 @@ Write custom script to install-recovery.sh, probably best to install/chown/chmod
 	shell("echo '#!/system/bin/sh' > /system/etc/install-recovery.sh");
 	shell("echo 'cat /data/local/su > /system/xbin/su' >> /system/etc/install-recovery.sh");
 	shell("echo 'chown 0.0 /system/xbin/su' >> /system/etc/install-recovery.sh");
-	shell("echo 'chmod 06744 /system/xbin/su' >> /system/etc/install-recovery.sh");
+	shell("echo 'chmod 06755 /system/xbin/su' >> /system/etc/install-recovery.sh");
 
 Reboot
 	sendBroadcast(new Intent("android.intent.action.emdoe").putExtra("com.zte.smartdialer.input", "*983*27274#));
